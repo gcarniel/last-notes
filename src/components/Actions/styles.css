@@ -7,7 +7,7 @@
 .actions > button {
   cursor: pointer;
   padding: 2px;
-  background: red;
+  background: transparent;
   border: none;
 }
 
