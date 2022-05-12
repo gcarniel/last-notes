@@ -3,10 +3,37 @@ import './styles.css'
 import Note from '../Note'
 import { useHighlight } from '../../context/HighlightContext'
 import { useNoteList } from '../../context/NoteListContext'
+import { useEffect } from 'react'
+import { useNoteForm } from '../../context/NoteFormContext'
 
 export default function Notes() {
   const { highlight, setHighlight } = useHighlight()
   const { noteList, setNoteList } = useNoteList()
+  const { setVisibleForm, setTitle, setDescription } = useNoteForm()
+
+  useEffect(() => {
+    getLocalNotes()
+  }, [])
+
+  useEffect(() => {
+    if (highlight) {
+      const highlightedNote = noteList.find((note) => note.id === highlight)
+
+      setTitle(highlightedNote.title)
+      setDescription(highlightedNote.description)
+      setVisibleForm(true)
+    } else {
+      setTitle('')
+      setDescription('')
+    }
+  }, [highlight])
+
+  function getLocalNotes() {
+    const localNotes = JSON.parse(localStorage.getItem('last-notes') || [])
+
+    setNoteList(localNotes)
+  }
+
   return (
     <section className="notes">
       {noteList?.map((note) => {

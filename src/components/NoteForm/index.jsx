@@ -1,16 +1,20 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { FaBan, FaCheck } from 'react-icons/fa'
+import { useHighlight } from '../../context/HighlightContext'
+import { useNoteForm } from '../../context/NoteFormContext'
 import { useNoteList } from '../../context/NoteListContext'
 
 import './styles.css'
 
 export default function NoteForm() {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-
-  console.log(title, description)
-
   const { noteList, setNoteList } = useNoteList()
+  const { title, setTitle, description, setDescription, setVisibleForm } =
+    useNoteForm()
+  const { highlight, setHighlight } = useHighlight()
+
+  useEffect(() => {
+    saveLocalNotes()
+  }, [noteList])
 
   function handlerTitle(e) {
     setTitle(e.target.value)
@@ -23,9 +27,38 @@ export default function NoteForm() {
   function handlerSubmit(e) {
     e.preventDefault()
 
-    const id = String(Math.floor(Math.random() * 10000))
+    if (highlight) {
+      const highlightedNote = noteList.map((note) => {
+        if (note.id === highlight) {
+          return { ...note, title, description }
+        }
+        return note
+      })
 
+      setNoteList(highlightedNote)
+      clearValues()
+      return
+    }
+
+    const id = String(Math.floor(Math.random() * 10000))
     setNoteList([...noteList, { id, title, description }])
+    clearValues()
+  }
+
+  function cancelHandler(e) {
+    e.preventDefault()
+    setHighlight(false)
+    setVisibleForm(false)
+  }
+
+  function clearValues() {
+    setTitle('')
+    setDescription('')
+    setHighlight(false)
+  }
+
+  function saveLocalNotes() {
+    localStorage.setItem('last-notes', JSON.stringify(noteList))
   }
 
   return (
@@ -54,7 +87,7 @@ export default function NoteForm() {
       </div>
 
       <div className="buttons">
-        <button className="cancel">
+        <button className="cancel" onClick={cancelHandler}>
           <FaBan className="icon" />
         </button>
 
