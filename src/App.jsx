@@ -7,21 +7,25 @@ import HighlightProvider from './context/HighlightContext'
 import NoteListProvider from './context/NoteListContext'
 import NoteFormProvider from './context/NoteFormContext'
 
+import { NextUIProvider } from '@nextui-org/react'
+
 function App() {
   return (
-    <NoteFormProvider>
-      <NoteListProvider>
-        <HighlightProvider>
-          <Header>
-            <Logo />
-            <Actions />
-          </Header>
-          <NotesArea>
-            <Notes />
-          </NotesArea>
-        </HighlightProvider>
-      </NoteListProvider>
-    </NoteFormProvider>
+    <NextUIProvider>
+      <NoteFormProvider>
+        <NoteListProvider>
+          <HighlightProvider>
+            <Header>
+              <Logo />
+              <Actions />
+            </Header>
+            <NotesArea>
+              <Notes />
+            </NotesArea>
+          </HighlightProvider>
+        </NoteListProvider>
+      </NoteFormProvider>
+    </NextUIProvider>
   )
 }
 

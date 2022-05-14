@@ -1,18 +1,23 @@
+import { useState } from 'react'
 import { FaPlus, FaPencilAlt, FaTrash } from 'react-icons/fa'
 import { useHighlight } from '../../context/HighlightContext'
 import { useNoteForm } from '../../context/NoteFormContext'
 import { useNoteList } from '../../context/NoteListContext'
+import ModalForm from '../Modal'
 
 import './styles.css'
 
 export default function Actions() {
+  const [visible, setVisible] = useState(false)
   const { setVisibleForm, setTitle, setDescription } = useNoteForm()
   const { highlight, setHighlight } = useHighlight()
   const { noteList, setNoteList } = useNoteList()
 
   function toggleCreate() {
-    setVisibleForm(true)
+    // setVisibleForm(true)
+    setVisible(true)
     clearValues()
+
     // if (visibleForm) {
     //   setVisibleForm(false)
     // } else {
@@ -57,6 +62,7 @@ export default function Actions() {
       <button className="delete" onClick={deleteHandler}>
         <FaTrash className={`icon ${!highlight && 'disabled'}`} />
       </button>
+      <ModalForm visible={visible} setVisible={setVisible} />
     </div>
   )
 }

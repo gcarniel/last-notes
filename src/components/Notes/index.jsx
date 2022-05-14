@@ -29,7 +29,8 @@ export default function Notes() {
   }, [highlight])
 
   function getLocalNotes() {
-    const localNotes = JSON.parse(localStorage.getItem('last-notes') || [])
+    const notesSaved = localStorage.getItem('last-notes')
+    const localNotes = JSON.parse(notesSaved) || []
 
     setNoteList(localNotes)
   }

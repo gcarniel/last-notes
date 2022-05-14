@@ -1,12 +1,17 @@
-import { useEffect } from 'react'
+import { Loading } from '@nextui-org/react'
+import { useEffect, useRef, useState } from 'react'
 import { FaBan, FaCheck } from 'react-icons/fa'
 import { useHighlight } from '../../context/HighlightContext'
 import { useNoteForm } from '../../context/NoteFormContext'
 import { useNoteList } from '../../context/NoteListContext'
+import { Input, Spacer } from '@nextui-org/react'
 
 import './styles.css'
 
 export default function NoteForm() {
+  const inputRef = useRef(null)
+  const [loading, setLoading] = useState(false)
+
   const { noteList, setNoteList } = useNoteList()
   const { title, setTitle, description, setDescription, setVisibleForm } =
     useNoteForm()
@@ -26,6 +31,16 @@ export default function NoteForm() {
 
   function handlerSubmit(e) {
     e.preventDefault()
+
+    const isValidNote = validateFields()
+
+    if (!isValidNote) {
+      inputRef?.current?.focus()
+      alert(`Preencha os campos`)
+      return
+    }
+
+    setLoading(true)
 
     if (highlight) {
       const highlightedNote = noteList.map((note) => {
@@ -55,6 +70,14 @@ export default function NoteForm() {
     setTitle('')
     setDescription('')
     setHighlight(false)
+    setLoading(false)
+  }
+
+  function validateFields() {
+    if (title && description) {
+      return true
+    }
+    return false
   }
 
   function saveLocalNotes() {
@@ -66,12 +89,21 @@ export default function NoteForm() {
       <div>
         <label htmlFor="title">Título</label>
         <input
+          ref={inputRef}
           id="title"
           type="text"
           placeholder="Informe um título"
           value={title}
           onChange={handlerTitle}
         />
+        {/* <Input
+          clearable
+          bordered
+          labelPlaceholder="Título"
+          initialValue={title}
+          value={title}
+          onChange={handlerTitle}
+        /> */}
       </div>
 
       <div>
@@ -91,8 +123,17 @@ export default function NoteForm() {
           <FaBan className="icon" />
         </button>
 
-        <button className="confirm" type="submit" onClick={handlerSubmit}>
-          <FaCheck className="icon" />
+        <button
+          className="confirm"
+          disabled={loading}
+          type="submit"
+          onClick={handlerSubmit}
+        >
+          {loading ? (
+            <Loading color="currentColor" size="sm" />
+          ) : (
+            <FaCheck className="icon" />
+          )}
         </button>
       </div>
     </form>
