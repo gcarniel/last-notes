@@ -1,5 +1,6 @@
 import { useHighlight } from '../../context/HighlightContext'
 import { useNoteForm } from '../../context/NoteFormContext'
+import Actions from '../Actions'
 import './styles.css'
 
 export default function Note({ id, title, description }) {
@@ -25,6 +26,8 @@ export default function Note({ id, title, description }) {
       <h2 className="title">{title}</h2>
       <hr />
       <p className="note-description">{description}</p>
+      <hr />
+      <Actions />
     </div>
   )
 }

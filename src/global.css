@@ -1,7 +1,9 @@
 :root {
-  --header-background: #2f2f2f;
-  --note-background: #c4c4c4;
+  --header-background: #070f19;
+  --note-background: #353743;
   --dark-gray: #474747;
+  --border-color: #5980e0;
+  --font-color: #638df9;
 }
 
 * {
@@ -9,10 +11,13 @@
   padding: 0;
   box-sizing: border-box;
 
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   text-decoration: none;
   --webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+body {
+  background-color: #080808;
 }
 
 ul,
